@@ -20,9 +20,9 @@ import { useBookDetailsProvider } from '../providers/useBookDetailsProvider'
 import { BookSalesModal } from './BookSalesModal'
 import { useSalesProvider } from '../providers/useSalesProvider'
 import type { SaleModel } from '../SaleModel'
-import { useClientProvider } from '@/books/providers/useClientProvider'
-import type { ClientModel } from '@/books/ClientModel'
-import { useBookAuthorsProviders } from '@/books/providers/useBookAuthorsProviders'
+import { useClientProvider } from '../providers/useClientProvider'
+import type { ClientModel } from '../ClientModel'
+import { useBookAuthorsProviders } from '../providers/useBookAuthorsProviders'
 
 interface BookDetailsProps {
   id: string
