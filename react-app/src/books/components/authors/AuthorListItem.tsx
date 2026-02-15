@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react'
-import type { BookModel } from '../BookModel'
+import type { AuthorModel } from '../../AuthorModel'
+import { Link } from '@tanstack/react-router'
 import { Button, Col, Row, Modal, Typography } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { Link } from '@tanstack/react-router'
-import { useSalesProvider } from '../providers/useSalesProvider'
+import type { BookModel } from '../../BookModel'
+import { useState } from 'react'
 
-interface BookListItemProps {
-  book: BookModel
+export interface AuthorListItemParams {
+  author: AuthorModel
+  books: BookModel[]
   onDelete: (id: string) => void
 }
 
-export function BookListItem({ book, onDelete }: BookListItemProps) {
+export function AuthorListItem({
+  author,
+  books,
+  onDelete,
+}: AuthorListItemParams) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  const { sales, loadSales } = useSalesProvider()
 
-  useEffect(() => {
-    loadSales()
-  }, [loadSales])
-
-  const bookSales = sales.filter(sale => sale.bookId === book.id).length
+  const authorBooks = books.filter(book => book.author.id === author.id).length
 
   return (
     <>
@@ -47,22 +47,20 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
         >
           <>
             <Link
-              to="/books/$bookId"
-              params={{ bookId: book.id }}
+              to="/authors/$authorId"
+              params={{ authorId: author.id }}
               style={{
                 margin: 'auto 0',
                 textAlign: 'left',
               }}
             >
-              <span style={{ fontWeight: 'bold' }}>{book.title}</span>
-              <span style={{ marginLeft: '.5rem', color: '#555' }}>
-                ({'by '}
-                {book.author.firstName} {book.author.lastName})
+              <span style={{ fontWeight: 'bold' }}>
+                {author.firstName} {author.lastName}
               </span>
             </Link>
 
             <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
-              Total copies sold: <strong>{bookSales}</strong>
+              Total books written: <strong>{authorBooks}</strong>
             </Typography.Text>
           </>
         </Col>
@@ -70,10 +68,11 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
         <Col
           span={4}
           style={{
+            alignItems: 'right',
             display: 'flex',
+            gap: '.25rem',
+            margin: 'auto 0',
             justifyContent: 'flex-end',
-            alignItems: 'center',
-            paddingRight: '1.25rem',
           }}
         >
           <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>
@@ -84,17 +83,18 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
 
       <Modal
         open={isDeleteOpen}
-        title="Delete book"
+        title="Delete author"
         onCancel={() => setIsDeleteOpen(false)}
         okText="Delete"
         cancelText="Cancel"
         okButtonProps={{ danger: true }}
         onOk={() => {
-          onDelete(book.id)
+          onDelete(author.id)
           setIsDeleteOpen(false)
         }}
       >
-        Are you sure you want to delete the book: {book.title}?
+        Are you sure you want to delete the author: {author.firstName}{' '}
+        {author.lastName}?
       </Modal>
     </>
   )
