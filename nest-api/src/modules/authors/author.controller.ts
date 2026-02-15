@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Delete, Patch } from '@nestjs/common';
 import { AuthorService } from './author.service';
-import { CreateAuthorDto } from './author.dto';
+import { CreateAuthorDto, UpdateAuthorDto } from './author.dto';
 
 @Controller('authors')
 export class AuthorController {
@@ -15,4 +15,20 @@ export class AuthorController {
   public async createAuthor(@Body() createAuthorDto: CreateAuthorDto) {
     return this.authorService.createAuthor(createAuthorDto);
   }
+
+  @Get(':id')
+    public async getAuthor(@Param('id') id: string) {
+      return this.authorService.getAuthorById(id);
+    }
+
+  @Delete(':id')
+    public async deleteAuthor(@Param('id') id: string){
+      return this.authorService.deleteAuthor(id);
+    }
+
+  @Patch(':id')
+    public async UpdateAuthor(@Param('id') id:string, @Body() updateAuthorDto: UpdateAuthorDto){ //is there a missing type here?
+      return this.authorService.updateAuthor(id, updateAuthorDto);
+    }
+    
 }
